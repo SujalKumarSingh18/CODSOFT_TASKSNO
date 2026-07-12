@@ -21,12 +21,11 @@ app.use('/api/students', studentRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 
+const errorHandler = require('./middleware/errorHandler');
+
 // 2. TODO: Implement the global error handling middleware.
 // Hint: In Express, an error-handling middleware has exactly four arguments: (err, req, res, next).
 // It should catch all unhandled errors, log the error, and return a 500 status code with a clean error message.
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+app.use(errorHandler);
 
 module.exports = app;
