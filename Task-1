@@ -1,0 +1,98 @@
+# Student Record Management API - Implementation Plan
+
+We will build a clean, modular, and robust backend using Express.js and a relational database (PostgreSQL or MySQL) to manage students, courses, and enrollments.
+
+## User Review Required
+
+Please review the proposed database schema, Express.js folder structure, and API endpoints below. 
+
+Once you approve this plan, we will start the step-by-step Socratic implementation.
+
+---
+
+## Proposed Database Schema
+
+We will design three relational tables with appropriate constraints to ensure data integrity.
+
+### 1. `Students` Table
+Holds the profiles of students registered in the system.
+- `id`: `INT` Auto-Increment or `UUID` (Primary Key)
+- `first_name`: `VARCHAR(50)` (Not Null)
+- `last_name`: `VARCHAR(50)` (Not Null)
+- `email`: `VARCHAR(100)` (Unique, Not Null)
+- `date_of_birth`: `DATE` (Not Null)
+- `created_at`: `TIMESTAMP` (Default CURRENT_TIMESTAMP)
+- `updated_at`: `TIMESTAMP` (Default CURRENT_TIMESTAMP)
+
+### 2. `Courses` Table
+Holds the curriculum courses.
+- `id`: `INT` Auto-Increment or `UUID` (Primary Key)
+- `course_code`: `VARCHAR(20)` (Unique, Not Null, e.g., "CS-101")
+- `title`: `VARCHAR(100)` (Not Null)
+- `description`: `TEXT` (Nullable)
+- `credits`: `INT` (Not Null, with constraint > 0)
+- `created_at`: `TIMESTAMP` (Default CURRENT_TIMESTAMP)
+- `updated_at`: `TIMESTAMP` (Default CURRENT_TIMESTAMP)
+
+### 3. `Enrollments` Table (Junction Table)
+Represents the many-to-many relationship between Students and Courses.
+- `id`: `INT` Auto-Increment or `UUID` (Primary Key)
+- `student_id`: `INT` / `UUID` (Foreign Key referencing `Students(id)` with `ON DELETE CASCADE`)
+- `course_id`: `INT` / `UUID` (Foreign Key referencing `Courses(id)` with `ON DELETE CASCADE`)
+- `enrollment_date`: `DATE` or `TIMESTAMP` (Default CURRENT_TIMESTAMP)
+- `grade`: `VARCHAR(2)` (Nullable, e.g., 'A', 'B+', 'F')
+- *Unique Constraint*: `(student_id, course_id)` to prevent a student from enrolling in the same course multiple times.
+
+---
+
+## Proposed Folder Structure
+
+A production-ready, clean separation of concerns:
+
+```text
+src/
+  ├── config/           # Database connection & configurations
+  ├── controllers/      # Request/Response route controllers
+  ├── middleware/       # Custom middleware (error handling, request validation)
+  ├── models/           # Database models/queries (using SQL queries or Sequelize/Prisma)
+  ├── routes/           # Express router endpoints
+  ├── utils/            # Utilities (pagination, search-helpers, status codes)
+  ├── app.js            # Express app initialization
+  └── server.js         # Entry point to listen and run the server
+package.json
+.env                    # Environment variables (DB credentials, PORT)
+```
+
+---
+
+## Proposed REST API Endpoints
+
+### 1. Students CRUD & Search (`/api/students`)
+- `POST /api/students` - Create a student profile.
+- `GET /api/students` - Retrieve students (supports pagination, filtering by `email` or `name`, and sorting).
+- `GET /api/students/:id` - Retrieve a single student's profile.
+- `PUT /api/students/:id` - Update student profile.
+- `DELETE /api/students/:id` - Delete student (cascades and deletes enrollments).
+
+### 2. Courses CRUD (`/api/courses`)
+- `POST /api/courses` - Create a course.
+- `GET /api/courses` - Retrieve all courses.
+- `GET /api/courses/:id` - Retrieve a single course.
+- `PUT /api/courses/:id` - Update course details.
+- `DELETE /api/courses/:id` - Delete course (cascades and deletes enrollments).
+
+### 3. Enrollments CRUD (`/api/enrollments`)
+- `POST /api/enrollments` - Enroll a student in a course (body: `{ student_id, course_id }`).
+- `GET /api/enrollments` - List all enrollments.
+- `GET /api/students/:id/courses` - List courses a specific student is enrolled in.
+- `GET /api/courses/:id/students` - List students enrolled in a specific course.
+- `PUT /api/enrollments/:id` - Update enrollment grade.
+- `DELETE /api/enrollments/:id` - Drop/unenroll a student from a course.
+
+---
+
+## Verification Plan
+
+We will verify our endpoints using:
+- **API Client Testing**: Manual REST tests using a tool like Postman or VS Code REST Client.
+- **Unit/Integration Tests**: Simple script-based endpoint tests using `Supertest` and `Jest` or direct validation.
