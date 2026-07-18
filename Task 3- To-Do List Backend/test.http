@@ -8,8 +8,8 @@ GET {{baseUrl}}/status
 
 ###
 
-# @name registerUserA
 ### 2. Register User A (Success Case)
+# @name registerUserA
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -20,8 +20,8 @@ Content-Type: application/json
 
 ###
 
-# @name loginUserA
 ### 3. Login User A (Success Case - Returns Token)
+# @name loginUserA
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -37,8 +37,8 @@ Content-Type: application/json
 
 ###
 
-# @name registerUserB
 ### 4. Register User B (Success Case)
+# @name registerUserB
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -49,8 +49,8 @@ Content-Type: application/json
 
 ###
 
-# @name loginUserB
 ### 5. Login User B (Success Case - Returns Token)
+# @name loginUserB
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -66,8 +66,8 @@ Content-Type: application/json
 
 ###
 
-# @name createTask1
 ### 6. Create Task 1 (User A - Personal Category)
+# @name createTask1
 POST {{baseUrl}}/api/tasks
 Content-Type: application/json
 Authorization: Bearer {{tokenA}}
@@ -88,8 +88,8 @@ Authorization: Bearer {{tokenA}}
 
 ###
 
-# @name createTask2
 ### 7. Create Task 2 (User A - Work Category)
+# @name createTask2
 POST {{baseUrl}}/api/tasks
 Content-Type: application/json
 Authorization: Bearer {{tokenA}}
