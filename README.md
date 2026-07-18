@@ -275,14 +275,34 @@ Task 3- To-Do List Backend/
    JWT_EXPIRES_IN=7d
    ```
 4. **Start the Application**:
-   * Standard run:
+   * Standard run (Requires local MongoDB):
      ```bash
      npm start
      ```
-   * Development run:
+   * Development run (Requires local MongoDB):
      ```bash
      npm run dev
      ```
+   * Zero-Configuration run (Spins up in-memory MongoDB database server automatically):
+     ```bash
+     npm run dev:mem
+     ```
 5. **View API Docs**:
    Navigate to `http://localhost:3000/api-docs` on your browser.
+
+---
+
+## API Testing with REST Client (.http)
+
+Each task directory contains a professional-grade `.http` test client file designed for the VS Code **REST Client** extension. You can send API requests and view responses directly from VS Code without needing Postman.
+
+* **Task 1 (Student Record Management API)**: Exposes [test_api.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%201-%20Student%20Management%20API/test_api.http) covering student registrations, course creations, and enrollment check calls.
+* **Task 2 (Contact Management System)**: Exposes [test.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%202-%20Contact%20Management%20System/test.http) covering contact CRUD, validations, filtering, searching, and pagination.
+* **Task 3 (To-Do List Backend)**: Exposes [test.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%203-%20To-Do%20List%20Backend/test.http) covering user registration, login, secure task management, searching, sorting, pagination, and user isolation security checks.
+
+### How to use:
+1. Install the **REST Client** extension in VS Code.
+2. Ensure the corresponding task's API server is running.
+3. Open the `.http` file in VS Code and click **"Send Request"** directly above the HTTP definitions. For Task 3, JWT tokens are captured and chained automatically!
+
 

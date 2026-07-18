@@ -82,18 +82,34 @@ Task 3- To-Do List Backend/
    ```
 
 4. **Start the Application**:
-   - For production execution:
+   - For production execution (Requires local MongoDB):
      ```bash
      npm start
      ```
-   - For development execution (utilizing nodemon for auto-reloading):
+   - For development execution (Requires local MongoDB):
      ```bash
      npm run dev
+     ```
+   - For zero-configuration in-memory database execution:
+     ```bash
+     npm run dev:mem
      ```
 
 5. **Interact with the API**:
    Once the server boots up, navigate to the Swagger documentation:
    `http://localhost:3000/api-docs`
+
+---
+
+## Testing the API with REST Client
+
+This project contains a [test.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%203-%20To-Do%20List%20Backend/test.http) file designed for the VS Code **REST Client** extension. You can register, login, execute CRUD operations, filter, sort, and paginate tasks directly from VS Code. 
+
+### Running the HTTP Tests:
+1. Install the **REST Client** extension in VS Code.
+2. Start the Task 3 API server (either `npm run dev` or `npm run dev:mem`).
+3. Open the `test.http` file and click **"Send Request"** directly above the requests. Token variables (e.g., `{{tokenA}}`) and task IDs are captured dynamically!
+
 
 ---
 

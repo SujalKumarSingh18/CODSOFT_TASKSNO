@@ -195,3 +195,15 @@ MONGODB_URI=mongodb://127.0.0.1:27017/contact_manager
     "message": "Contact deleted successfully"
   }
   ```
+
+---
+
+## Testing the API with REST Client
+
+This project contains a [test.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%202-%20Contact%20Management%20System/test.http) file designed for the VS Code **REST Client** extension. You can execute status checks, create contacts, retrieve paginated and sorted results, and run update/delete operations directly from VS Code.
+
+### Running the HTTP Tests:
+1. Install the **REST Client** extension in VS Code.
+2. Start the Task 2 API server (either `npm run dev` or `npm run dev:mem`).
+3. Open the `test.http` file and click the **"Send Request"** button directly above the request declarations.
+

@@ -99,3 +99,15 @@ Task 1- Student Management API/
      ```bash
      npm run dev
      ```
+
+---
+
+## Testing the API with REST Client
+
+This project contains a [test_api.http](file:///c:/Users/sujal/Desktop/CodSoft/Task%201-%20Student%20Management%20API/test_api.http) file designed for the VS Code **REST Client** extension. You can execute student profile registers, course creations, status checks, sorting, pagination, and enrollment operations directly within VS Code without using Postman.
+
+### Running the HTTP Tests:
+1. Install the **REST Client** extension in VS Code.
+2. Start the Task 1 API server (`npm run dev`).
+3. Open the `test_api.http` file and click the **"Send Request"** button directly above the request declarations.
+
