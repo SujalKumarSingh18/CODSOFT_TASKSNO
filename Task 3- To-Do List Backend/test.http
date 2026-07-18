@@ -1,0 +1,174 @@
+# REST Client Test File for To-Do List Backend API
+# Install the "REST Client" extension in VS Code to send these requests directly from this file.
+
+@baseUrl = http://localhost:3000
+
+### 1. Check Server and Database Status
+GET {{baseUrl}}/status
+
+###
+
+# @name registerUserA
+### 2. Register User A (Success Case)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "usera@example.com",
+  "password": "password123"
+}
+
+###
+
+# @name loginUserA
+### 3. Login User A (Success Case - Returns Token)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usera@example.com",
+  "password": "password123"
+}
+
+###
+
+# Capture User A JWT Token dynamically
+@tokenA = {{loginUserA.response.body.token}}
+
+###
+
+# @name registerUserB
+### 4. Register User B (Success Case)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "userb@example.com",
+  "password": "password456"
+}
+
+###
+
+# @name loginUserB
+### 5. Login User B (Success Case - Returns Token)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "userb@example.com",
+  "password": "password456"
+}
+
+###
+
+# Capture User B JWT Token dynamically
+@tokenB = {{loginUserB.response.body.token}}
+
+###
+
+# @name createTask1
+### 6. Create Task 1 (User A - Personal Category)
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{tokenA}}
+
+{
+  "title": "Buy Groceries",
+  "description": "Milk, Bread, Fruits, Vegetables",
+  "completed": false,
+  "priority": "low",
+  "category": "Personal",
+  "dueDate": "2026-07-25T12:00:00.000Z"
+}
+
+###
+
+# Capture Task 1 ID dynamically
+@task1Id = {{createTask1.response.body._id}}
+
+###
+
+# @name createTask2
+### 7. Create Task 2 (User A - Work Category)
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{tokenA}}
+
+{
+  "title": "Finish Assignments",
+  "description": "Task 3 Backend service with OpenAPI and Swagger UI",
+  "completed": false,
+  "priority": "high",
+  "category": "Work",
+  "dueDate": "2026-07-20T18:00:00.000Z"
+}
+
+###
+
+# Capture Task 2 ID dynamically
+@task2Id = {{createTask2.response.body._id}}
+
+###
+
+### 8. Get All Tasks for User A (Page 1, sorted by dueDate)
+GET {{baseUrl}}/api/tasks?page=1&limit=5&sortBy=dueDate&order=asc
+Authorization: Bearer {{tokenA}}
+
+###
+
+### 9. Filter Tasks by Category (Personal)
+GET {{baseUrl}}/api/tasks?category=Personal
+Authorization: Bearer {{tokenA}}
+
+###
+
+### 10. Search Tasks by Query Keyword
+GET {{baseUrl}}/api/tasks?q=Assignments
+Authorization: Bearer {{tokenA}}
+
+###
+
+### 11. Retrieve Task 1 by ID (User A)
+GET {{baseUrl}}/api/tasks/{{task1Id}}
+Authorization: Bearer {{tokenA}}
+
+###
+
+### 12. Security Check: User B Attempts to Retrieve User A's Task (Expected: 404 Not Found)
+GET {{baseUrl}}/api/tasks/{{task1Id}}
+Authorization: Bearer {{tokenB}}
+
+###
+
+### 13. Update Task 1 Completion Status (User A)
+PUT {{baseUrl}}/api/tasks/{{task1Id}}
+Content-Type: application/json
+Authorization: Bearer {{tokenA}}
+
+{
+  "completed": true,
+  "priority": "medium"
+}
+
+###
+
+### 14. Security Check: User B Attempts to Update User A's Task (Expected: 404 Not Found)
+PUT {{baseUrl}}/api/tasks/{{task1Id}}
+Content-Type: application/json
+Authorization: Bearer {{tokenB}}
+
+{
+  "title": "Hacked Title"
+}
+
+###
+
+### 15. Delete Task 2 (User A)
+DELETE {{baseUrl}}/api/tasks/{{task2Id}}
+Authorization: Bearer {{tokenA}}
+
+###
+
+### 16. Security Check: User B Attempts to Delete User A's Task (Expected: 404 Not Found)
+DELETE {{baseUrl}}/api/tasks/{{task1Id}}
+Authorization: Bearer {{tokenB}}
