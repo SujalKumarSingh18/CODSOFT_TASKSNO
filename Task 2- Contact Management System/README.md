@@ -65,9 +65,15 @@ MONGODB_URI=mongodb://127.0.0.1:27017/contact_manager
 ```
 
 ### 3. Run the Application
-* **Development (Auto-Restart on changes)**:
+* **Development (With Local MongoDB Service)**:
+  Make sure your local MongoDB server is running, then start the server:
   ```bash
   npm run dev
+  ```
+* **Development (Zero-Configuration, In-Memory DB)**:
+  If you do not have MongoDB installed or running locally, start the in-memory database server:
+  ```bash
+  npm run dev:mem
   ```
 * **Production**:
   ```bash

@@ -181,9 +181,13 @@ Task 2- Contact Management System/
      ```bash
      npm start
      ```
-   * For development (with auto-restart on changes):
+   * For development (with local MongoDB database service):
      ```bash
      npm run dev
+     ```
+   * For development (with zero-configuration, in-memory MongoDB):
+     ```bash
+     npm run dev:mem
      ```
 
 ---
