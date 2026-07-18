@@ -105,3 +105,180 @@ Task 1- Student Management API/
      ```bash
      npm run dev
      ```
+
+---
+
+## Task 2: Contact Management System
+
+A robust, modular REST API developed using **Express.js (Node.js)** and **MongoDB (Mongoose)** to manage personal and professional contacts.
+
+### Key Features
+* **Modular Architecture**: Complete separation of concerns into Config, Models, Controllers, Routes, Middleware, and Utility layers.
+* **Mongoose Schema & Indexing**: Database-enforced validation, unique indexing, and automated timestamps.
+* **Input Validation & Duplicate Prevention**: Custom validators check body data for email and phone patterns, and perform duplicate checks against MongoDB before controllers process the request.
+* **Advanced Query Support**:
+  * **Search**: Partial, case-insensitive string matching across `name`, `email`, and `phone`.
+  * **Sorting**: Sort dynamically by any contact property in `asc` or `desc` order.
+  * **Pagination**: Standard limit and page management returning full pagination metadata.
+* **Global Error Handler**: Custom error-handling middleware that intercepts Mongoose validation, cast, and duplicate key errors to return meaningful JSON error messages.
+
+---
+
+### Folder Structure
+
+```text
+Task 2- Contact Management System/
+  ├── src/
+  │    ├── config/           # Database Connection
+  │    │     └── db.js
+  │    ├── models/           # Mongoose Data Models
+  │    │     └── contact.js
+  │    ├── middleware/       # Custom Middlewares
+  │    │     ├── errorHandler.js
+  │    │     └── validation.js
+  │    ├── controllers/      # Route Controller Logic
+  │    │     └── contactsController.js
+  │    ├── routes/           # Express Route Definitions
+  │    │     └── contacts.js
+  │    ├── utils/            # Helper Utilities
+  │    │     └── validators.js
+  │    └── app.js            # Express app configuration
+  ├── package.json
+  └── .env                   # Environment variables (DB URI, Port)
+```
+
+---
+
+### REST API Endpoints
+
+#### Contacts (`/api/contacts`)
+* `POST /api/contacts` - Register a new contact. (Body: `name`, `email`, `phone`, `address`, `company`).
+* `GET /api/contacts` - Retrieve a paginated, sorted, and searched list of contacts. (Supports: `page`, `limit`, `search`, `sortBy`, `order`).
+* `GET /api/contacts/:id` - Retrieve a contact's profile by ID.
+* `PUT /api/contacts/:id` - Update contact profile (with validation and duplicate check).
+* `DELETE /api/contacts/:id` - Delete contact by ID.
+
+---
+
+### Local Setup Instructions
+
+1. **Navigate to Task 2 directory**:
+   ```bash
+   cd "Task 2- Contact Management System"
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root of the task directory:
+   ```text
+   PORT=3000
+   MONGODB_URI=mongodb://127.0.0.1:27017/contact_manager
+   ```
+4. **Start the Application**:
+   * For production/standard execution:
+     ```bash
+     npm start
+     ```
+   * For development (with auto-restart on changes):
+     ```bash
+     npm run dev
+     ```
+
+---
+
+## Task 3: To-Do List Backend
+
+A professional-grade, secure REST API developed using **Express.js (Node.js)** and **MongoDB (Mongoose)** to manage task items with user authentication isolation.
+
+### Key Features
+* **Modular Architecture**: Clean MVC organization separating database, schemas, routes, controller logic, validations, and documentation.
+* **JWT User Authentication**: Features token-based login and registration, password encryption via `bcryptjs`, and strict database query filters enforcing task isolation per user.
+* **Comprehensive Task Options**: Full CRUD endpoints with checks validating task inputs (title, priority level, due dates, completion state).
+* **Advanced Query Support**:
+  * **Search**: Partial, case-insensitive string matching across task title and descriptions.
+  * **Filtering**: Filters on completion status, priority level, and categories.
+  * **Sorting**: Dynamic ascending/descending sorting based on any task property.
+  * **Pagination**: Standard limit and page parameters with JSON response pagination metadata.
+* **Global Error Handler**: Catches database validations, duplicate email errors, or malformed payloads, mapping them to standard JSON errors.
+* **API Documentation (Swagger UI)**: Renders OpenAPI 3.0 specification documents interactively via Swagger UI at `/api-docs`.
+
+---
+
+### Folder Structure
+
+```text
+Task 3- To-Do List Backend/
+  ├── src/
+  │    ├── config/           # Database Connection Setup
+  │    │     └── db.js
+  │    ├── models/           # Mongoose Data Models (User, Task)
+  │    │     ├── user.js
+  │    │     └── task.js
+  │    ├── middleware/       # Custom Middlewares (JWT Auth, Validation, Errors)
+  │    │     ├── auth.js
+  │    │     ├── validation.js
+  │    │     └── errorHandler.js
+  │    ├── controllers/      # Route Actions
+  │    │     ├── authController.js
+  │    │     └── tasksController.js
+  │    ├── routes/           # Routing Definitions
+  │    │     ├── auth.js
+  │    │     └── tasks.js
+  │    ├── utils/            # Helper Utilities
+  │    │     └── validators.js
+  │    ├── docs/             # OpenAPI Specification
+  │    │     └── swagger.json
+  │    └── app.js            # Express config
+  ├── package.json
+  └── .env                   # Configuration parameters
+```
+
+---
+
+### REST API Endpoints
+
+#### 1. Authentication (`/api/auth`)
+* `POST /api/auth/register` - Create a new user account. (Body: `email`, `password`).
+* `POST /api/auth/login` - Authenticate credentials and return JWT token. (Body: `email`, `password`).
+
+#### 2. Tasks (`/api/tasks`) - *Requires Header: `Authorization: Bearer <token>`*
+* `POST /api/tasks` - Create a new task. (Body: `title`, `description`, `completed`, `priority`, `dueDate`, `category`).
+* `GET /api/tasks` - Retrieve a paginated, filterable, and searched list of tasks. (Supports: `page`, `limit`, `completed`, `priority`, `category`, `q`, `sortBy`, `order`).
+* `GET /api/tasks/:id` - Fetch details of a specific task by ID.
+* `PUT /api/tasks/:id` - Update an existing task's attributes. (Body: *updated fields*).
+* `DELETE /api/tasks/:id` - Delete a task by ID.
+
+---
+
+### Local Setup Instructions
+
+1. **Navigate to Task 3 directory**:
+   ```bash
+   cd "Task 3- To-Do List Backend"
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root of the task directory:
+   ```text
+   PORT=3000
+   MONGODB_URI=mongodb://127.0.0.1:27017/todo_db
+   JWT_SECRET=supersecretjwtkeyforauth
+   JWT_EXPIRES_IN=7d
+   ```
+4. **Start the Application**:
+   * Standard run:
+     ```bash
+     npm start
+     ```
+   * Development run:
+     ```bash
+     npm run dev
+     ```
+5. **View API Docs**:
+   Navigate to `http://localhost:3000/api-docs` on your browser.
+

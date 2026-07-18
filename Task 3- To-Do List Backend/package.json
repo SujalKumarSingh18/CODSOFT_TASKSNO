@@ -1,0 +1,33 @@
+{
+  "name": "todo-list-backend-api",
+  "version": "1.0.0",
+  "description": "Professional-grade To-Do List Backend REST API built with Node.js, Express, MongoDB (Mongoose), and JWT authentication.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "todo-list",
+    "jwt-auth",
+    "crud-api",
+    "swagger"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^9.2.0",
+    "nodemon": "^3.1.2"
+  }
+}

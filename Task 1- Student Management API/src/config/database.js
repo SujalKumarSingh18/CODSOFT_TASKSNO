@@ -22,11 +22,7 @@ function initializeTables() {
       if (err) console.error('Failed to enable foreign keys:', err.message);
     });
 
-    // 1. TODO: Write the SQL query to create the "students" table if it doesn't exist.
-    // Hints:
-    // - Needs: id (Primary Key, integer, auto-increment)
-    // - first_name, last_name, email (unique), date_of_birth (all required)
-    // - created_at (timestamp, defaults to current time)
+    // Create the "students" table to hold student profile information
     const createStudentsTable = `
       CREATE TABLE IF NOT EXISTS students (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,11 +34,7 @@ function initializeTables() {
       );
     `;
 
-    // 2. TODO: Write the SQL query to create the "courses" table if it doesn't exist.
-    // Hints:
-    // - Needs: id (Primary Key, integer, auto-increment)
-    // - course_code (unique, e.g., 'CS-101'), title, credits (integer)
-    // - description (text, optional)
+    // Create the "courses" table to hold the academic course listings
     const createCoursesTable = `
       CREATE TABLE IF NOT EXISTS courses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,14 +45,9 @@ function initializeTables() {
       );
     `;
 
-    // 3. TODO: Write the SQL query to create the "enrollments" table if it doesn't exist.
-    // Hints:
-    // - Needs: id (Primary Key, integer, auto-increment)
-    // - student_id (Foreign Key referencing students(id) with Cascade on Delete)
-    // - course_id (Foreign Key referencing courses(id) with Cascade on Delete)
-    // - enrollment_date (defaults to current timestamp)
-    // - grade (optional, max 2 chars)
-    // - A UNIQUE constraint on (student_id, course_id) so a student can't enroll in the same course twice!
+    // Create the "enrollments" junction table mapping students to courses.
+    // Utilizes ON DELETE CASCADE for foreign key references, and UNIQUE key mapping
+    // to prevent duplicate student-course enrollments.
     const createEnrollmentsTable = `
       CREATE TABLE IF NOT EXISTS enrollments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
