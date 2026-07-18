@@ -1,0 +1,223 @@
+### Student Record Management API - Live Demonstration
+### Install the "REST Client" extension in VS Code to click and run these requests directly.
+
+@baseUrl = http://localhost:3000/api
+
+### -------------------------------------------------------------
+### 1. CHECK SERVER & DATABASE STATUS
+### -------------------------------------------------------------
+GET http://localhost:3000/status
+
+###
+
+### -------------------------------------------------------------
+### 2. TEST INPUT VALIDATIONS (EXPECTING 400 BAD REQUEST)
+### -------------------------------------------------------------
+
+# A. Try to register a student with an invalid email format
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "invalid-email-format",
+  "date_of_birth": "2000-01-01"
+}
+
+###
+
+# B. Try to register a student with an invalid date format
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john@example.com",
+  "date_of_birth": "01-01-2000"
+}
+
+###
+
+### -------------------------------------------------------------
+### 3. REGISTER STUDENTS (EXPECTING 201 CREATED)
+### -------------------------------------------------------------
+
+# A. Register Student A (Alice)
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "first_name": "Alice",
+  "last_name": "Smith",
+  "email": "alice@example.com",
+  "date_of_birth": "2002-05-14"
+}
+
+###
+
+# B. Register Student B (Bob)
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "first_name": "Bob",
+  "last_name": "Jones",
+  "email": "bob@example.com",
+  "date_of_birth": "2001-08-22"
+}
+
+###
+
+# C. Try to register a duplicate email (Expect 400 Bad Request)
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "first_name": "Duplicate",
+  "last_name": "Alice",
+  "email": "alice@example.com",
+  "date_of_birth": "2000-01-01"
+}
+
+###
+
+### -------------------------------------------------------------
+### 4. SEARCH, SORT, AND PAGINATION
+### -------------------------------------------------------------
+
+# A. Search for students named "Alice"
+GET {{baseUrl}}/students?search=Alice
+
+###
+
+# B. Sort students by first_name in descending order (Bob should appear first)
+GET {{baseUrl}}/students?sortBy=first_name&order=DESC
+
+###
+
+# C. Get paginated students list (Limit = 1, Page = 2)
+GET {{baseUrl}}/students?limit=1&page=2
+
+###
+
+### -------------------------------------------------------------
+### 5. CREATE COURSES (EXPECTING 201 CREATED)
+### -------------------------------------------------------------
+
+# A. Create Course A (CS-101)
+POST {{baseUrl}}/courses
+Content-Type: application/json
+
+{
+  "course_code": "CS-101",
+  "title": "Introduction to Computer Science",
+  "credits": 3,
+  "description": "Fundamental programming concepts"
+}
+
+###
+
+# B. Create Course B (CS-102)
+POST {{baseUrl}}/courses
+Content-Type: application/json
+
+{
+  "course_code": "CS-102",
+  "title": "Data Structures & Algorithms",
+  "credits": 4,
+  "description": "Arrays, Trees, Graphs, Sorting algorithms"
+}
+
+###
+
+### -------------------------------------------------------------
+### 6. ENROLL STUDENTS IN COURSES
+### -------------------------------------------------------------
+
+# A. Enroll Alice (ID 1) in CS-101 (ID 1)
+POST {{baseUrl}}/enrollments
+Content-Type: application/json
+
+{
+  "student_id": 1,
+  "course_id": 1
+}
+
+###
+
+# B. Enroll Alice (ID 1) in CS-102 (ID 2)
+POST {{baseUrl}}/enrollments
+Content-Type: application/json
+
+{
+  "student_id": 1,
+  "course_id": 2
+}
+
+###
+
+# C. Enroll Bob (ID 2) in CS-101 (ID 1)
+POST {{baseUrl}}/enrollments
+Content-Type: application/json
+
+{
+  "student_id": 2,
+  "course_id": 1
+}
+
+###
+
+# D. Try duplicate enrollment (Alice in CS-101 again) -> (Expect 400 Bad Request)
+POST {{baseUrl}}/enrollments
+Content-Type: application/json
+
+{
+  "student_id": 1,
+  "course_id": 1
+}
+
+###
+
+### -------------------------------------------------------------
+### 7. MANAGE GRADES
+### -------------------------------------------------------------
+
+# A. Update Alice's grade in CS-101 to 'A+' (Enrollment ID is 1)
+PUT {{baseUrl}}/enrollments/1
+Content-Type: application/json
+
+{
+  "grade": "A+"
+}
+
+###
+
+# B. Get Alice's (ID 1) enrolled courses (Should show CS-101 with grade A+ and CS-102 with null grade)
+GET {{baseUrl}}/students/1/courses
+
+###
+
+### -------------------------------------------------------------
+### 8. CASCADE DELETION TEST (RELATIONAL INTEGRITY)
+### -------------------------------------------------------------
+
+# Step A: Check students currently enrolled in CS-101 (Expect Alice and Bob)
+GET {{baseUrl}}/courses/1/students
+
+###
+
+# Step B: Delete Alice (ID 1)
+DELETE {{baseUrl}}/students/1
+
+###
+
+# Step C: Verify Alice's profile returns 404 Not Found
+GET {{baseUrl}}/students/1
+
+###
+
+# Step D: Re-check CS-101 enrolled students (Expect ONLY Bob to be enrolled)
+# This proves SQLite CASCADE DELETE deleted Alice's enrollment automatically!
+GET {{baseUrl}}/courses/1/students
