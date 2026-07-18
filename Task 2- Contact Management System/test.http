@@ -1,0 +1,112 @@
+# REST Client Test File for Contact Management System API
+# Install the "REST Client" extension in VS Code to send these requests directly from this file.
+
+@baseUrl = http://localhost:3000
+
+### 1. Check Server and Database Status
+GET {{baseUrl}}/status
+
+###
+
+### 2. Create Contact 1 (John Doe) - Success Case
+POST {{baseUrl}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "+1234567890",
+  "address": "123 Main St",
+  "company": "ACME Inc"
+}
+
+###
+
+### 3. Create Contact 2 (Alice Smith) - Success Case
+POST {{baseUrl}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "Alice Smith",
+  "email": "alice@company.com",
+  "phone": "+1122334455",
+  "address": "456 Elm St",
+  "company": "Beta Corp"
+}
+
+###
+
+### 4. Create Contact with Duplicate Email (Expected: 400 Bad Request)
+POST {{baseUrl}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "John Duplicate",
+  "email": "john@example.com",
+  "phone": "+9876543210",
+  "address": "321 Second St",
+  "company": "ACME Copied"
+}
+
+###
+
+### 5. Create Contact with Invalid Email & Phone (Expected: 400 Bad Request)
+POST {{baseUrl}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "not-an-email",
+  "phone": "123"
+}
+
+###
+
+### 6. Get All Contacts (Supports search, pagination, and sorting)
+GET {{baseUrl}}/api/contacts?page=1&limit=5&sortBy=name&order=asc
+
+###
+
+### 7. Search Contacts (Partial match on name, email, or phone)
+GET {{baseUrl}}/api/contacts?search=Alice
+
+###
+
+### 8. Get Single Contact by ID
+# NOTE: Replace the ID below with a valid MongoDB ID returned from a previous POST request.
+GET {{baseUrl}}/api/contacts/64b0f9f3c1d9b3d0a2f4a56a
+
+###
+
+### 9. Update Contact by ID (Success Case)
+# NOTE: Replace the ID below with a valid MongoDB ID.
+PUT {{baseUrl}}/api/contacts/64b0f9f3c1d9b3d0a2f4a56a
+Content-Type: application/json
+
+{
+  "name": "John Doe Updated",
+  "email": "john.updated@example.com",
+  "phone": "+1234567890",
+  "address": "789 Oak Ave",
+  "company": "ACME Corp"
+}
+
+###
+
+### 10. Update Contact with a Taken Email (Expected: 400 Bad Request)
+# NOTE: Replace the ID below with a valid MongoDB ID (e.g. John's ID).
+# We attempt to set John's email to 'alice@company.com' which is already taken by Alice.
+PUT {{baseUrl}}/api/contacts/64b0f9f3c1d9b3d0a2f4a56a
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "alice@company.com",
+  "phone": "+1234567890"
+}
+
+###
+
+### 11. Delete Contact by ID
+# NOTE: Replace the ID below with a valid MongoDB ID.
+DELETE {{baseUrl}}/api/contacts/64b0f9f3c1d9b3d0a2f4a56a
